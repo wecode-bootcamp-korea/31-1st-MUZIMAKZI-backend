@@ -3,7 +3,7 @@ from django.db import models
 from users.models import TimeStampedModel
 
 
-class Category(models.model):
+class Category(models.Model):
     name = models.CharField(max_length=100)
 
     class Meta:
@@ -13,7 +13,7 @@ class Category(models.model):
         return self.name
 
 
-class Type(models.model):
+class Type(models.Model):
     name      = models.CharField(max_length=100)
     thumbnail = models.URLField(max_length=2000)
     category  = models.ForeignKey('Category', related_name='category_type', on_delete=models.CASCADE)
@@ -40,7 +40,7 @@ class Product(TimeStampedModel):
         return self.name
 
 
-class Product_option(models.model):
+class Product_option(models.Model):
     product = models.ForeignKey('Product', related_name='option_product', on_delete=models.CASCADE)
     size    = models.ForeignKey('Size', related_name='product_size', on_delete=models.CASCADE)
     color   = models.ForeignKey('Color', related_name='product_color', on_delete=models.CASCADE)
@@ -63,7 +63,7 @@ class Image(TimeStampedModel):
         return self.product
 
 
-class Size(models.model):
+class Size(models.Model):
     name = models.CharField(max_length=100)
 
     class Meta:
@@ -73,7 +73,7 @@ class Size(models.model):
         return self.name
 
 
-class Color(models.model):
+class Color(models.Model):
     name = models.CharField(max_length=100)
 
     class Meta:
