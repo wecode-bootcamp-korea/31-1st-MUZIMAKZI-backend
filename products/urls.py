@@ -1,5 +1,7 @@
 from django.urls import path, include
 
-urlpatterns = [
+from products.views import ProductCategoryView
 
+urlpatterns = [
+    path('/categories', ProductCategoryView.as_view()),
 ]

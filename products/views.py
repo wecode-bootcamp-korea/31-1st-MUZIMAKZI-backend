@@ -7,10 +7,10 @@ from products.models import Type
 
 
 class ProductCategoryView(View):
-    def post(self, request):
+    def get(self, request):
         try:
             data     = json.loads(request.body)
-            category = data['category']
+            category = data['category_id']
 
             types = Type.objects.filter(category=category)
 
@@ -27,5 +27,5 @@ class ProductCategoryView(View):
             return JsonResponse({'message': 'invalid key'}, status=400)
 
 
-    def get(self, request):
+    def post(self, request):
         pass
