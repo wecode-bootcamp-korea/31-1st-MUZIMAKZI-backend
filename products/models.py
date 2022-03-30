@@ -49,7 +49,7 @@ class Tag(models.Model):
         return self.tag
 
 
-class Product_option(models.Model):
+class ProductOption(models.Model):
     product  = models.ForeignKey('Product', related_name='option_product', on_delete=models.CASCADE)
     size     = models.ForeignKey('Size', related_name='product_size', on_delete=models.CASCADE)
     color    = models.ForeignKey('Color', related_name='product_color', on_delete=models.CASCADE)
