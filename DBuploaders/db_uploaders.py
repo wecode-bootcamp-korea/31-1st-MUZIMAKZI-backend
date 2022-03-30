@@ -1,0 +1,136 @@
+import os, csv
+import django
+
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'MUZIMAKZI.settings')
+django.setup()
+
+from products.models import *
+from users.models import *
+from carts.models import *
+
+def insert_category():
+    CSV_PATH = './DBuploaders/muzimakzi_data/categories.csv'
+
+    with open(CSV_PATH) as in_file:
+        data_reader = csv.reader(in_file)
+        for row in data_reader:
+            if 'id' in row:
+                continue
+
+            category_name = row[1]
+
+            Category.objects.create(
+                name = category_name
+            )
+
+
+def insert_type():
+    CSV_PATH = './DBuploaders/muzimakzi_data/types.csv'
+
+    with open(CSV_PATH) as in_file:
+        data_reader = csv.reader(in_file)
+        for row in data_reader:
+            if 'id' in row:
+                continue
+
+            type_name = row[1]
+            thumbnail_image_url = row[2]
+            category_id = row[3]
+
+            Type.objects.create(
+                name=type_name,
+                thumbnail_image_url= thumbnail_image_url,
+                category_id= category_id
+            )
+
+def insert_tags():
+    CSV_PATH = './DBuploaders/muzimakzi_data/types.csv'
+
+    with open(CSV_PATH) as in_file:
+        data_reader = csv.reader(in_file)
+        for row in data_reader:
+            if 'id' in row:
+                continue
+
+            tag = row[1]
+
+            Tag.objects.create(tag=tag)
+
+def insert_sizes():
+    CSV_PATH = './DBuploaders/muzimakzi_data/sizes.csv'
+
+    with open(CSV_PATH) as in_file:
+        data_reader = csv.reader(in_file)
+        for row in data_reader:
+            if 'id' in row:
+                continue
+
+            name = row[1]
+
+            Tag.objects.create(name=name)
+
+def insert_products_options():
+    CSV_PATH = './DBuploaders/muzimakzi_data/products_options.csv'
+
+    with open(CSV_PATH) as in_file:
+        data_reader = csv.reader(in_file)
+        for row in data_reader:
+            if 'id' in row:
+                continue
+
+            stock       = row[1]
+            color_id    = row[2]
+            product_id  = row[3]
+            size_id     = row[4]
+
+            ProductOption.objects.create(
+                product = Product.objects.get(id=product_id).id,
+                size    = Size.objects.get(id=size_id).id,
+                color   = Color.objects.get(id=color_id).id,
+                stock   = stock
+            )
+
+def insert_products():
+    CSV_PATH = './DBuploaders/muzimakzi_data/products.csv'
+
+    with open(CSV_PATH) as in_file:
+        data_reader = csv.reader(in_file)
+        for row in data_reader:
+            if 'id' in row:
+                continue
+
+            name = row[3]
+            price = row[4]
+            description = row[5]
+            thumbnail_image_url = row[6]
+            type_id = row[7]
+
+            Product.objects.create(
+                name                = name,
+                price               = price,
+                description         = description,
+                thumbnail_image_url = thumbnail_image_url,
+                type                = Type.objects.get(id=type_id).id
+            )
+
+
+
+# os.chdir('.')
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# sys.path.append(BASE_DIR)
+#
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'MUZIMAKZI.settings')
+# django.setup()
+#
+# CSV_PATH     = './DBuploaders/muzimakzi_data'
+# file_list    = os.listdir(CSV_PATH)
+#
+# # table_name = []
+# # for file in file_list:
+# #     table_name.append(file.split('.csv'))
+#
+#
+# for file in file_list:
+#     with open(file, newline='', encoding='utf8') as csvfile:
+#         rows = csv.reader(csvfile, delimiter=',')
