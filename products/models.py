@@ -30,7 +30,6 @@ class Product(TimeStampedModel):
     price                 = models.DecimalField(max_digits=9, decimal_places=2)
     description           = models.TextField()
     thumbnail_image_url   = models.URLField(max_length=2000)
-    tag                   = models.CharField(max_length=100)
     type                  = models.ForeignKey('Type', related_name='product_type', on_delete=models.CASCADE)
 
     class Meta:
@@ -39,12 +38,22 @@ class Product(TimeStampedModel):
     def __str__(self):
         return self.name
 
+class Tag(models.Model):
+    product = models.ForeignKey('Product', related_name='tags', on_delete=models.CASCADE)
+    tag     = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = 'tags'
+
+    def __str__(self):
+        return self.tag
+
 
 class Product_option(models.Model):
     product  = models.ForeignKey('Product', related_name='option_product', on_delete=models.CASCADE)
     size     = models.ForeignKey('Size', related_name='product_size', on_delete=models.CASCADE)
     color    = models.ForeignKey('Color', related_name='product_color', on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    stock    = models.IntegerField(default=0)
 
     class Meta:
         db_table = 'products_options'
