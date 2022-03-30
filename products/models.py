@@ -39,7 +39,7 @@ class Product(TimeStampedModel):
         return self.name
 
 class Tag(models.Model):
-    products = models.ManyToManyField('Product', related_name='tags', on_delete=models.CASCADE)
+    products = models.ManyToManyField('Product', related_name='tags')
     tag     = models.CharField(max_length=100)
 
     class Meta:
