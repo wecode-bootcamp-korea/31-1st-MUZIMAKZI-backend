@@ -1,8 +1,8 @@
 import re
 
-from django.forms import ValidationError
+from django.core.exceptions import ValidationError
 
-def Validate_Email(email) :
+def validate_email(email) :
     
     validator = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
     
@@ -11,7 +11,7 @@ def Validate_Email(email) :
     
     return True
 
-def Validate_Password(password) :
+def validate_password(password) :
     
     validator = re.compile("^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$")
     
