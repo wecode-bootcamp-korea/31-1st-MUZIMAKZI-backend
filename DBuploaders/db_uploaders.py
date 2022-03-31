@@ -174,7 +174,25 @@ def insert_cart():
 
 def insert_user():
     CSV_PATH = './DBuploaders/muzimakzi_data/users.csv'
-    pass
+
+    with open(CSV_PATH) as in_file:
+        data_reader = csv.reader(in_file)
+        for row in data_reader:
+            if 'id' in row:
+                continue
+
+            user_id = row[5]
+            quantity = row[3]
+            product_option_id = row[4]
+
+
+            Cart.objects.create(
+                user = User.objects.get(id=user_id).id,
+                product_option = ProductOption.objects.get(id=product_option_id).id,
+                quantity = quantity
+            )
+
+
     #
     # with open(CSV_PATH) as in_file:
     #     data_reader = csv.reader(in_file)
