@@ -1,7 +1,6 @@
 import os, csv
 import django
 
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'MUZIMAKZI.settings')
 django.setup()
 
@@ -192,40 +191,13 @@ def insert_user():
                 quantity = quantity
             )
 
-
-    #
-    # with open(CSV_PATH) as in_file:
-    #     data_reader = csv.reader(in_file)
-    #     for row in data_reader:
-    #         if 'id' in row:
-    #             continue
-    #
-    #         User.objects.create(
-    #             user
-    #         product_option
-    #         quantity
-    #         )
-
-
-
-
-
-
-# os.chdir('.')
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# sys.path.append(BASE_DIR)
-#
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'MUZIMAKZI.settings')
-# django.setup()
-#
-# CSV_PATH     = './DBuploaders/muzimakzi_data'
-# file_list    = os.listdir(CSV_PATH)
-#
-# # table_name = []
-# # for file in file_list:
-# #     table_name.append(file.split('.csv'))
-#
-#
-# for file in file_list:
-#     with open(file, newline='', encoding='utf8') as csvfile:
-#         rows = csv.reader(csvfile, delimiter=',')
+insert_user()
+insert_category()
+insert_type()
+insert_sizes()
+insert_color()
+insert_products_options()
+insert_cart()
+insert_products()
+insert_images()
+insert_tags()
