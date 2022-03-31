@@ -24,41 +24,8 @@ def insert_category():
                 name = category_name
             )
 
-
-def insert_type():
-    CSV_PATH = './DBuploaders/muzimakzi_data/types.csv'
-
-    with open(CSV_PATH) as in_file:
-        data_reader = csv.reader(in_file)
-        for row in data_reader:
-            if 'id' in row:
-                continue
-
-            type_name = row[1]
-            thumbnail_image_url = row[2]
-            category_id = row[3]
-
-            Type.objects.create(
-                name=type_name,
-                thumbnail_image_url= thumbnail_image_url,
-                category_id= category_id
-            )
-
-def insert_tags():
-    CSV_PATH = './DBuploaders/muzimakzi_data/types.csv'
-
-    with open(CSV_PATH) as in_file:
-        data_reader = csv.reader(in_file)
-        for row in data_reader:
-            if 'id' in row:
-                continue
-
-            tag = row[1]
-
-            Tag.objects.create(tag=tag)
-
-def insert_sizes():
-    CSV_PATH = './DBuploaders/muzimakzi_data/sizes.csv'
+def insert_color():
+    CSV_PATH = './DBuploaders/muzimakzi_data/colors.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -68,10 +35,12 @@ def insert_sizes():
 
             name = row[1]
 
-            Tag.objects.create(name=name)
+            Color.objects.create(
+                name=name
+            )
 
-def insert_products_options():
-    CSV_PATH = './DBuploaders/muzimakzi_data/products_options.csv'
+def insert_images():
+    CSV_PATH = './DBuploaders/muzimakzi_data/images.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -79,16 +48,12 @@ def insert_products_options():
             if 'id' in row:
                 continue
 
-            stock       = row[1]
-            color_id    = row[2]
-            product_id  = row[3]
-            size_id     = row[4]
+            image_url  = row[3]
+            product_id = row[4]
 
-            ProductOption.objects.create(
-                product = Product.objects.get(id=product_id).id,
-                size    = Size.objects.get(id=size_id).id,
-                color   = Color.objects.get(id=color_id).id,
-                stock   = stock
+            Product.objects.create(
+                image_url = image_url,
+                product= Product.objects.get(id=product_id).id
             )
 
 def insert_products():
@@ -113,6 +78,77 @@ def insert_products():
                 thumbnail_image_url = thumbnail_image_url,
                 type                = Type.objects.get(id=type_id).id
             )
+
+def insert_products_options():
+    CSV_PATH = './DBuploaders/muzimakzi_data/products_options.csv'
+
+    with open(CSV_PATH) as in_file:
+        data_reader = csv.reader(in_file)
+        for row in data_reader:
+            if 'id' in row:
+                continue
+
+            stock       = row[1]
+            color_id    = row[2]
+            product_id  = row[3]
+            size_id     = row[4]
+
+            ProductOption.objects.create(
+                product = Product.objects.get(id=product_id).id,
+                size    = Size.objects.get(id=size_id).id,
+                color   = Color.objects.get(id=color_id).id,
+                stock   = stock
+            )
+
+def insert_sizes():
+    CSV_PATH = './DBuploaders/muzimakzi_data/sizes.csv'
+
+    with open(CSV_PATH) as in_file:
+        data_reader = csv.reader(in_file)
+        for row in data_reader:
+            if 'id' in row:
+                continue
+
+            name = row[1]
+
+            Tag.objects.create(name=name)
+
+def insert_tags():
+    CSV_PATH = './DBuploaders/muzimakzi_data/types.csv'
+
+    with open(CSV_PATH) as in_file:
+        data_reader = csv.reader(in_file)
+        for row in data_reader:
+            if 'id' in row:
+                continue
+
+            tag = row[1]
+
+            Tag.objects.create(tag=tag)
+
+def insert_type():
+    CSV_PATH = './DBuploaders/muzimakzi_data/types.csv'
+
+    with open(CSV_PATH) as in_file:
+        data_reader = csv.reader(in_file)
+        for row in data_reader:
+            if 'id' in row:
+                continue
+
+            type_name = row[1]
+            thumbnail_image_url = row[2]
+            category_id = row[3]
+
+            Type.objects.create(
+                name=type_name,
+                thumbnail_image_url= thumbnail_image_url,
+                category_id= category_id
+            )
+
+
+
+
+
 
 
 
