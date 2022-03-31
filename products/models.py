@@ -91,3 +91,9 @@ class Color(models.Model):
 
     def __str__(self):
         return self.name
+
+class Landing(models.Model):
+    image_url = models.URLField(max_length=2000)
+
+    class Meta:
+        db_table = 'landing_images'
