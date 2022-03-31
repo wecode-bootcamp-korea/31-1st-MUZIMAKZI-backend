@@ -9,6 +9,7 @@ from products.models import *
 from users.models import *
 from carts.models import *
 
+# category 외래키 없음.
 def insert_category():
     CSV_PATH = './DBuploaders/muzimakzi_data/categories.csv'
 
@@ -24,6 +25,7 @@ def insert_category():
                 name = category_name
             )
 
+# color 외래키 없음.
 def insert_color():
     CSV_PATH = './DBuploaders/muzimakzi_data/colors.csv'
 
@@ -39,6 +41,7 @@ def insert_color():
                 name=name
             )
 
+# images 외래키 있음.
 def insert_images():
     CSV_PATH = './DBuploaders/muzimakzi_data/images.csv'
 
@@ -56,6 +59,7 @@ def insert_images():
                 product= Product.objects.get(id=product_id).id
             )
 
+# products 외래키 있음.
 def insert_products():
     CSV_PATH = './DBuploaders/muzimakzi_data/products.csv'
 
@@ -79,6 +83,7 @@ def insert_products():
                 type                = Type.objects.get(id=type_id).id
             )
 
+# products_options 외래키 있음.
 def insert_products_options():
     CSV_PATH = './DBuploaders/muzimakzi_data/products_options.csv'
 
@@ -100,6 +105,7 @@ def insert_products_options():
                 stock   = stock
             )
 
+# sizes 외래키 없음.
 def insert_sizes():
     CSV_PATH = './DBuploaders/muzimakzi_data/sizes.csv'
 
@@ -111,10 +117,11 @@ def insert_sizes():
 
             name = row[1]
 
-            Tag.objects.create(name=name)
+            Size.objects.create(name=name)
+
 
 def insert_tags():
-    CSV_PATH = './DBuploaders/muzimakzi_data/types.csv'
+    CSV_PATH = './DBuploaders/muzimakzi_data/tags.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -145,7 +152,41 @@ def insert_type():
                 category_id= category_id
             )
 
+def insert_cart():
+    CSV_PATH = './DBuploaders/muzimakzi_data/carts.csv'
 
+    with open(CSV_PATH) as in_file:
+        data_reader = csv.reader(in_file)
+        for row in data_reader:
+            if 'id' in row:
+                continue
+
+            user_id = row[5]
+            quantity = row[3]
+            product_option_id = row[4]
+
+
+            Cart.objects.create(
+                user = User.objects.get(id=user_id).id,
+                product_option = ProductOption.objects.get(id=product_option_id).id,
+                quantity = quantity
+            )
+
+def insert_user():
+    CSV_PATH = './DBuploaders/muzimakzi_data/users.csv'
+    pass
+    #
+    # with open(CSV_PATH) as in_file:
+    #     data_reader = csv.reader(in_file)
+    #     for row in data_reader:
+    #         if 'id' in row:
+    #             continue
+    #
+    #         User.objects.create(
+    #             user
+    #         product_option
+    #         quantity
+    #         )
 
 
 
