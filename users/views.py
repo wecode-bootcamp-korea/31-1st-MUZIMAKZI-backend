@@ -9,7 +9,6 @@ from django.core.exceptions import ValidationError
 
 from .validation import validate_email, validate_password
 
-        
 class SignUpView(View) :
     
     def post(self, request) :
@@ -25,9 +24,7 @@ class SignUpView(View) :
             if not validate_password(data["password"]) :
                 return JsonResponse({"message" : "INVALID PASSWORD"}, status = 400)
             
-            
             hashed_password = bcrypt.hashpw(data["password"].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-            
         
             User.objects.create(
                 first_name   = data['first_name'],
@@ -39,16 +36,12 @@ class SignUpView(View) :
             
             return JsonResponse({"message" : "SUCCESS"}, status = 201)
             
-            
         except KeyError :
             JsonResponse({"message" : "KEY_ERROR"}, status = 400)
+            
         except ValidationError :
             JsonResponse({"message" : "VALIDATION_ERROR"}, status = 400)
-        
-        
-        
-        
-
+            
 class SignInView(View) :
     
     def post(self, request) :
@@ -68,10 +61,8 @@ class SignInView(View) :
                 
             access_token = jwt.encode({"id" : check_user.id}, settings.SECRET_KEY, settings.ALGORITHM)
                 
-                
             return JsonResponse({"message" : "SUCCESS",
                                     "access_token" : access_token}, status = 200)
                 
-        
         except KeyError :
             JsonResponse({"message" : "KEY_ERROR"}, status = 400)
