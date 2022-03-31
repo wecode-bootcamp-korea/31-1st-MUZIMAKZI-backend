@@ -1,5 +1,13 @@
-import os, csv
+import os, csv, sys
 import django
+
+os.chdir(".")
+# print("Current dir=", end=""), print(os.getcwd())
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# print("BASE_DIR=", end=""), print(BASE_DIR)
+
+sys.path.append(BASE_DIR)
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'MUZIMAKZI.settings')
 django.setup()
@@ -10,7 +18,7 @@ from carts.models import *
 
 # category 외래키 없음.
 def insert_category():
-    CSV_PATH = './DBuploaders/muzimakzi_data/categories.csv'
+    CSV_PATH = './muzimakzi_data/categories.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -26,7 +34,7 @@ def insert_category():
 
 # color 외래키 없음.
 def insert_color():
-    CSV_PATH = './DBuploaders/muzimakzi_data/colors.csv'
+    CSV_PATH = './muzimakzi_data/colors.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -42,7 +50,7 @@ def insert_color():
 
 # images 외래키 있음.
 def insert_images():
-    CSV_PATH = './DBuploaders/muzimakzi_data/images.csv'
+    CSV_PATH = './muzimakzi_data/images.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -53,14 +61,14 @@ def insert_images():
             image_url  = row[3]
             product_id = row[4]
 
-            Product.objects.create(
+            Image.objects.create(
                 image_url = image_url,
-                product= Product.objects.get(id=product_id).id
+                product_id= product_id
             )
 
 # products 외래키 있음.
 def insert_products():
-    CSV_PATH = './DBuploaders/muzimakzi_data/products.csv'
+    CSV_PATH = './muzimakzi_data/products.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -75,16 +83,16 @@ def insert_products():
             type_id = row[7]
 
             Product.objects.create(
-                name                = name,
-                price               = price,
-                description         = description,
-                thumbnail_image_url = thumbnail_image_url,
-                type                = Type.objects.get(id=type_id).id
+                name                   = name,
+                price                  = price,
+                description            = description,
+                thumbnail_image_url    = thumbnail_image_url,
+                type_id                = type_id
             )
 
 # products_options 외래키 있음.
 def insert_products_options():
-    CSV_PATH = './DBuploaders/muzimakzi_data/products_options.csv'
+    CSV_PATH = './muzimakzi_data/products_options.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -98,15 +106,15 @@ def insert_products_options():
             size_id     = row[4]
 
             ProductOption.objects.create(
-                product = Product.objects.get(id=product_id).id,
-                size    = Size.objects.get(id=size_id).id,
-                color   = Color.objects.get(id=color_id).id,
-                stock   = stock
+                product_id = product_id,
+                size_id    = size_id,
+                color_id   = color_id,
+                stock      = stock
             )
 
 # sizes 외래키 없음.
 def insert_sizes():
-    CSV_PATH = './DBuploaders/muzimakzi_data/sizes.csv'
+    CSV_PATH = './muzimakzi_data/sizes.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -120,7 +128,7 @@ def insert_sizes():
 
 
 def insert_tags():
-    CSV_PATH = './DBuploaders/muzimakzi_data/tags.csv'
+    CSV_PATH = './muzimakzi_data/tags.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -133,7 +141,7 @@ def insert_tags():
             Tag.objects.create(tag=tag)
 
 def insert_type():
-    CSV_PATH = './DBuploaders/muzimakzi_data/types.csv'
+    CSV_PATH = './muzimakzi_data/types.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -146,13 +154,13 @@ def insert_type():
             category_id = row[3]
 
             Type.objects.create(
-                name=type_name,
-                thumbnail_image_url= thumbnail_image_url,
-                category_id= category_id
+                name                = type_name,
+                thumbnail_image_url = thumbnail_image_url,
+                category_id         = category_id
             )
 
 def insert_cart():
-    CSV_PATH = './DBuploaders/muzimakzi_data/carts.csv'
+    CSV_PATH = './muzimakzi_data/carts.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -160,19 +168,18 @@ def insert_cart():
             if 'id' in row:
                 continue
 
-            user_id = row[5]
             quantity = row[3]
             product_option_id = row[4]
-
+            user_id = row[5]
 
             Cart.objects.create(
-                user = User.objects.get(id=user_id).id,
-                product_option = ProductOption.objects.get(id=product_option_id).id,
+                user_id = user_id,
+                product_option_id = product_option_id,
                 quantity = quantity
             )
 
 def insert_user():
-    CSV_PATH = './DBuploaders/muzimakzi_data/users.csv'
+    CSV_PATH = './muzimakzi_data/users.csv'
 
     with open(CSV_PATH) as in_file:
         data_reader = csv.reader(in_file)
@@ -180,24 +187,28 @@ def insert_user():
             if 'id' in row:
                 continue
 
-            user_id = row[5]
-            quantity = row[3]
-            product_option_id = row[4]
+            first_name = row[3]
+            last_name = row[4]
+            email = row[5]
+            password = row[6]
+            phone_number = row[7]
 
-
-            Cart.objects.create(
-                user = User.objects.get(id=user_id).id,
-                product_option = ProductOption.objects.get(id=product_option_id).id,
-                quantity = quantity
+            User.objects.create(
+                first_name= first_name,
+                last_name = last_name,
+                email = email,
+                password= password,
+                phone_number=phone_number
             )
+
 
 insert_user()
 insert_category()
 insert_type()
+insert_products()
+insert_images()
+insert_tags()
 insert_sizes()
 insert_color()
 insert_products_options()
 insert_cart()
-insert_products()
-insert_images()
-insert_tags()
