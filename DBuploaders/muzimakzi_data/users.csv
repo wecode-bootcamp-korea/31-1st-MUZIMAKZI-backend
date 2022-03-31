@@ -1,0 +1,4 @@
+id,create_at,updated_at,first_name,last_name,email,password,phone_number
+1,2022-01-01 00:00:00,2022-01-01 00:00:00,재홍,엄,aaa@naver.com,abcd1234!!,010-111-1111
+2,2022-01-01 00:00:00,2022-01-01 00:00:00,강호,이,bbb@naver.com,abcd1234@@,010-222-2222
+3,2022-01-01 00:00:00,2022-01-01 00:00:00,혜성,문,ccc@naver.com,abcd1234##,010-333-3333
