@@ -26,7 +26,7 @@ class ProductCategoryView(View):
             return JsonResponse({'message': 'invalid key'}, status=400)
 
 class ProductListView(View):
-    def get(self, request):
+    def post(self, request):
         try:
             data = json.loads(request.body)
             type_id = data['type_id']
