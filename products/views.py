@@ -1,5 +1,5 @@
-from django.db.models import Q
-from products.models import Type, Product, Tag
+from django.db.models import Q, Count
+from products.models import Type, Product, Tag, TagProduct
 
 from django.http import JsonResponse
 from django.views import View
@@ -23,9 +23,9 @@ class ProductCategoryView(View):
 class ProductListView(View):
     def get(self, request):
         try:
-            type_id         = int(request.GET.get('type_id'))
+            type_id         = request.GET.get('type_id')
             tags            = request.GET.getlist('tags', None)
-            sort            = request.GET.get('sort', 'id')
+            sort            = request.GET.get('sort', 'asc')
             searching       = request.GET.get('name')
             limit           = int(request.GET.get('limit', 10))
             offset          = int(request.GET.get('offset', 0))
@@ -36,32 +36,25 @@ class ProductListView(View):
                 'desc': '-price'
             }
 
-            condition_product = Q()
-            condition_tag = Q()
-
-            if type_id:
-                condition_product &= Q(type_id=type_id)
-            if searching:
-                condition_product &= Q(name__icontains=searching)
+            condition = Q()
             if tags:
-                condition_tag &= Q(tag__in=tags)
+                condition &= Q(tag_id__in=tags)
 
-            # 이거 되는거
-            # products = Tag.objects.get(tag=tag).products.select_related('type').filter(product_condition)
+            products_key = TagProduct.objects.values('product_id').annotate(tag_count=Count('tag_id'))\
+                .filter(condition).filter(tag_count__gte=len(tags))
 
-            tags = Tag.objects.filter(condition_tag)
-            print(tags[0].products.filter(condition_product))
-            print(tags[1].products.filter(condition_product))
+            products = Product.objects.filter(id__in=[row['product_id'] for row in products_key[:]])\
+                           .filter(Q(name=searching) | Q(type_id=type_id))\
+                           .order_by(sort_option[sort])[offset:offset+limit]
 
-            # result = [{
-            #     'name'               : product.name,
-            #     'price'              : product.price,
-            #     'tags'               : [tag.tag for tag in product.tags.all()],
-            #     'thumbnail_image_url': product.thumbnail_image_url
-            # } for product in Tag.products.filter(condition_product)]
+            result = [{
+                'thumbnail_image_url': product.thumbnail_image_url,
+                'name'               : product.name,
+                'price'              : product.price,
+                'tags'               : [product_tag.tag.name for product_tag in product.tagproduct_set.all()]
+            } for product in products]
 
-            # return JsonResponse({'message': result}, status=200)
-            return JsonResponse({'message': '도전'}, status=200)
+            return JsonResponse({'message': result}, status=200)
 
         except Product.DoesNotExist:
             return JsonResponse({'message': 'product_not_exist'}, status=400)
