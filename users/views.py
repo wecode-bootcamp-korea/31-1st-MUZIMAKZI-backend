@@ -1,5 +1,7 @@
 import json, bcrypt, jwt
 
+from users.utils import login_decorator
+
 from .models import User
 
 from django.conf import settings
@@ -44,7 +46,6 @@ class SignUpView(View) :
             
             
 class SignInView(View) :
-    
     def post(self, request) :
         try :
             data = json.loads(request.body)
@@ -60,7 +61,7 @@ class SignInView(View) :
             if not bcrypt.checkpw(password.encode('utf-8'), check_user.password.encode('utf-8')) :
                 return JsonResponse({'message' : 'INVALID EMAIL OR PASSWORD'}, status = 401)
                 
-            access_token = jwt.encode({"id" : check_user.id}, settings.SECRET_KEY, settings.ALGORITHM)
+            access_token = jwt.encode({"id" : check_user.id}, settings.SECRET_KEY, settings.ALGORITHMS)
             
             return JsonResponse({
                 "message" : "SUCCESS",
