@@ -35,7 +35,7 @@ class Tag(models.Model):
         db_table = 'tags'
 
 class TagProduct(models.Model):
-    tag = models.ForeignKey('Tag', on_delete=models.CASCADE)
+    tag     = models.ForeignKey('Tag', on_delete=models.CASCADE)
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
 
     class Meta:
@@ -69,9 +69,8 @@ class Color(models.Model):
     class Meta:
         db_table = 'colors'
 
-
 class Promote(models.Model):
-    name = models.CharField(max_length=100)
+    name      = models.CharField(max_length=100)
     image_url = models.URLField(max_length=2000)
 
     class Meta:
