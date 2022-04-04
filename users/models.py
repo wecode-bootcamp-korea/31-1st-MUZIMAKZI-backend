@@ -12,4 +12,3 @@ class User(TimeStampedModel):
 
     class Meta:
         db_table = 'users'
-
