@@ -1,5 +1,5 @@
 from django.db.models   import Q
-from products.models import Type, Product, Category, Landing, Promote
+from products.models    import Type, Product, Category, Landing, Promote
 
 from django.http        import JsonResponse
 from django.views       import View
@@ -7,8 +7,8 @@ from django.views       import View
 class LandingView(View):
     def get(self, request):
         categories    = Category.objects.all()
-        landings = Landing.objects.all()
-        promotes = Promote.objects.all()
+        landings      = Landing.objects.all()
+        promotes      = Promote.objects.all()
 
         side_info=[{
             'category_id': category.id,
@@ -64,7 +64,7 @@ class ProductListView(View):
             if type_id:
                 condition &= Q(type_id=type_id)
             if tags:
-                    condition &= Q(tagproduct__tag_id__in=tags)
+                condition &= Q(tagproduct__tag_id__in=tags)
             if searching:
                 condition &= Q(name__icontains=searching)
 
