@@ -40,6 +40,7 @@ class TypeView(View):
             types = Type.objects.filter(category=category_id)
 
             results = [{
+                'type_id'      : type.id,
                 'name'         : type.name,
                 'thumbnail_url': type.thumbnail_image_url
             } for type in types]
