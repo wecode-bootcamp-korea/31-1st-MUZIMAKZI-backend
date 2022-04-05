@@ -48,6 +48,7 @@ class ProductListView(View):
                            .order_by(sort_option[sort])[offset:offset+limit]
 
             result = [{
+                'product_id'         : product.id,
                 'thumbnail_image_url': product.thumbnail_image_url,
                 'name'               : product.name,
                 'price'              : product.price,
