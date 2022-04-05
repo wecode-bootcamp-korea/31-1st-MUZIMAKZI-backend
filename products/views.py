@@ -74,7 +74,7 @@ class ProductListView(View):
 
             products_key = TagProduct.objects.values('product_id').annotate(tag_count=Count('tag_id'))\
                 .filter(condition).filter(tag_count__gte=len(tags))
-
+            print(products_key)
             products = Product.objects.filter(id__in=[row['product_id'] for row in products_key[:]])\
                            .filter(Q(name=searching) | Q(type_id=type_id))\
                            .order_by(sort_option[sort])[offset:offset+limit]
