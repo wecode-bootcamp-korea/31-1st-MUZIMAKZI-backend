@@ -1,5 +1,5 @@
 from django.db.models import Q, Count
-from products.models import Type, Product, Tag, TagProduct
+from products.models import Type, Product, Tag, TagProduct, Landing, Category, Promote
 
 from django.http import JsonResponse
 from django.views import View
@@ -7,11 +7,37 @@ from django.views import View
 
 class LandingView(View):
     def get(self, request):
-        return JsonResponse({'message': 'here'},status=200)
+        categories    = Category.objects.all()
+        landings = Landing.objects.all()
+        promotes = Promote.objects.all()
+
+        side_info=[{
+            'category_id': category.id,
+            'category_name': category.name,
+            'types': [{
+                'type_id' : type.id,
+                'type_name': type.name
+            } for type in category.type_set.all()]
+        } for category in categories]
+
+        landing_image = [{
+            'landing_image_url': landing.image_url
+        } for landing in landings]
+
+        promotes = [{
+            'promote_name': promote.name,
+            'promote_image_url': promote.image_url
+        } for promote in promotes]
+
+        return JsonResponse({
+            'side_info': side_info,
+            'landings': landing_image,
+            'promotes': promotes
+        }, status=200)
 
 
 
-class ProductCategoryView(View):
+class TypeView(View):
     def get(self, request, category_id):
         try:
             types = Type.objects.filter(category=category_id)
@@ -54,6 +80,7 @@ class ProductListView(View):
                            .order_by(sort_option[sort])[offset:offset+limit]
 
             result = [{
+                'product_id'         : product.id,
                 'thumbnail_image_url': product.thumbnail_image_url,
                 'name'               : product.name,
                 'price'              : product.price,
