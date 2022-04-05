@@ -5,6 +5,12 @@ from django.http import JsonResponse
 from django.views import View
 
 
+class LandingView(View):
+    def get(self, request):
+        return JsonResponse({'message': 'here'},status=200)
+
+
+
 class ProductCategoryView(View):
     def get(self, request, category_id):
         try:
