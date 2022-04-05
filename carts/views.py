@@ -1,3 +1,4 @@
+from itertools import product
 from django.http import JsonResponse
 from django.views import View
 
@@ -17,26 +18,22 @@ class AddCartView(View) :
         #user_id = request.user.id
         user_id = data['user_id']
        
-        option, created = ProductOption.objects.get_or_create(
+        option = ProductOption.objects.create(
             product = Product.objects.get(id= data['product_id']),
             size = Size.objects.get(id = data['size_id']),
             color = Color.objects.get(id = data['color_id']),
+            stock = int(data['quantity'])
             
         )
-        if not created :
-            option.stock += int(data['quantity'])
-        else:
-            option.save()
         
-        cart, created = Cart.objects.get_or_create(
+        
+       
+        Cart.objects.create(
             user = User.objects.get(id= data['user_id']),
             product_option = ProductOption.objects.get(id = option.id),
-            quantity = data["quantity"]
+            quantity = option.stock
         )
-        if not created :
-            cart.quantity += int(data['quantity'])
-        else:
-            cart.save()
+        
             
         return JsonResponse({'message' : "SUCCESS" })
         
@@ -50,11 +47,38 @@ class CartListView(View) :
         data = json.loads(request.body)
         
         products = Cart.objects.filter(user_id = data['user_id'])
-            
+        
+    
+        
         if not products.exists() :
             return JsonResponse({'message' : 'Cart Is Empty'})
+        
+        result = [{
+            "thumbnail_url" : Product.objects.get(id = ProductOption.objects.get(id=product.product_option_id).product_id).thumbnail_image_url,
+            "name"          : Product.objects.get(id = ProductOption.objects.get(id=product.product_option_id).product_id).name,
+            "price"         : Product.objects.get(id = ProductOption.objects.get(id=product.product_option_id).product_id).price,
+            "color"         : Color.objects.get(id = ProductOption.objects.get(id=product.product_option_id).color_id).name,
+            "size"          : Size.objects.get(id =ProductOption.objects.get(id=product.product_option_id).size_id).name,
+            #"quantity"      : Cart.objects.get(product_option_id = product.product_option_id).quantuty,
+        } for product in products]
+        
+        
+        return JsonResponse({'message' : result})        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
             
-        return JsonResponse[{"message" : products.values('product_option')}]
+        
+    
+    
+
         
        
        
