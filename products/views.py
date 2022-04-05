@@ -1,18 +1,18 @@
-from django.db.models import Q, Count
-from products.models import Type, Product, Tag, TagProduct
+from django.db.models   import Q, Count
+from products.models    import Type, Product, Tag, TagProduct
 
-from django.http import JsonResponse
-from django.views import View
+from django.http        import JsonResponse
+from django.views       import View
 
 
-class ProductCategoryView(View):
+class TypeView(View):
     def get(self, request, category_id):
         try:
             types = Type.objects.filter(category=category_id)
 
             result = [{
                 'name'         : type.name,
-                'thumbnail_url':type.thumbnail_image_url
+                'thumbnail_url': type.thumbnail_image_url
             } for type in types]
 
             return JsonResponse({'message': result}, status=200)
