@@ -1,4 +1,6 @@
-from django.db.models   import Q
+from django.db.models import Q
+from django_mysql.models import GroupConcat
+
 from products.models    import Type, Product, Category, Landing, Promote
 
 from django.http        import JsonResponse
@@ -69,7 +71,7 @@ class ProductListView(View):
             if searching:
                 condition &= Q(name__icontains=searching)
 
-            products = Product.objects.filter(condition).order_by(sort)[offset:offset+limit]
+            products = Product.objects.filter(condition).distinct().order_by(sort)[offset:offset+limit]
 
             results = [{
                 'product_id'         : product.id,
@@ -77,7 +79,7 @@ class ProductListView(View):
                 'name'               : product.name,
                 'price'              : product.price,
                 'tags'               : [tags.tag.name for tags in product.tagproduct_set.all()]
-            } for product in products if len(product.tagproduct_set.all()) >= len(tags)]
+            } for product in products]
 
             return JsonResponse({'message': results}, status=200)
 
