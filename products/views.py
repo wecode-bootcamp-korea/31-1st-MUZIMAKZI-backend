@@ -97,8 +97,8 @@ class ProductDetailView(View) :
                 'name'               : product.name,
                 'price'              : product.price,
                 'description'        : product.description,
-                'size'               : [size.name for size in Size.objects.all()],
-                'color'              : [color.name for color in Color.objects.all()],
+                'size'               : [[size.name, size.id] for size in Size.objects.all()],
+                'color'              : [[color.name, color.id] for color in Color.objects.all()],
                 'image'              : [image.image_url for image in images ]
             }
             
