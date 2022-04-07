@@ -37,10 +37,10 @@ class SignUpView(View) :
             return JsonResponse({"message" : "SUCCESS"}, status = 201)
             
         except KeyError :
-            JsonResponse({"message" : "KEY_ERROR"}, status = 400)
+            return JsonResponse({"message" : "KEY_ERROR"}, status = 400)
             
         except ValidationError :
-            JsonResponse({"message" : "VALIDATION_ERROR"}, status = 400)
+            return JsonResponse({"message" : "VALIDATION_ERROR"}, status = 400)
             
             
 class SignInView(View) :
@@ -68,4 +68,4 @@ class SignInView(View) :
             }, status = 200)
                 
         except KeyError :
-            JsonResponse({"message" : "KEY_ERROR"}, status = 400)
+            return JsonResponse({"message" : "KEY_ERROR"}, status = 400)
