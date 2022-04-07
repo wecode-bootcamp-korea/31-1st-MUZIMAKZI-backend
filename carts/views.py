@@ -16,7 +16,7 @@ class CartView(View) :
     def post(self, request):
         try :
             data = json.loads(request.body)
-            user_id = request.user
+            user = request.user
             
             product_option     = ProductOption.objects.get(
                 product        = Product.objects.get(id= data['product_id']),
@@ -25,7 +25,7 @@ class CartView(View) :
             )
 
             cart, is_created   = Cart.objects.get_or_create(
-                user           = User.objects.get(id = user_id),
+                user           = user,
                 product_option = product_option,
                 defaults       = {
                     "quantity" : data['quantity']
@@ -39,7 +39,11 @@ class CartView(View) :
             return JsonResponse({'message' : "SUCCESS" }, status=201)
         
         except KeyError :
-             return JsonResponse({'message' : "KEY ERROR" }, status=400)
+            return JsonResponse({'message' : "KEY_ERROR" }, status=400)
+        
+        except ProductOption.DoesNotExist :
+            return JsonResponse({'message' : "INVALID_ProductOption" }, status=400)
+            
          
         
     @login_decorator
@@ -63,7 +67,7 @@ class CartView(View) :
             return JsonResponse({'message' : results}, status=200)
         
         except KeyError :
-            return JsonResponse({'message' : "KEY ERROR"}, status=400)
+            return JsonResponse({'message' : "KEY_ERROR"}, status=400)
         
   
     @login_decorator
@@ -74,47 +78,41 @@ class CartView(View) :
             quantity = request.GET['quantity']
             
             if not Cart.objects.filter(user = user).exists() :
-                return JsonResponse({"message" : 'CART IS EMPTY'}, status = 400)
+                return JsonResponse({"message" : 'CART_DOES_NOT_EXIST'}, status = 400)
             
             if not Cart.objects.filter(id = cart_id).exists()   :
-                return JsonResponse({"message" : 'NOT EXISTS ITEM IN CART'}, status = 400)
+                return JsonResponse({"message" : 'NOT_EXISTS_ITEM_IN_CART'}, status = 400)
             
-            update_carts = Cart.objects.get(user = user, id = cart_id)
+            cart = Cart.objects.get(user = user, id = cart_id)
+        
+            cart.quantity = quantity
+            cart.save()
             
-            if update_carts.quantity == 0 :
-                return JsonResponse({"message" : 'QUANTITY is INVALID'}, status = 200)
-            
-            else :   
-                update_carts.quantity = quantity
-                update_carts.save()
-            
-            return JsonResponse({'message' : "SUCCESS", "changed quantity" : update_carts.quantity}, status=201)
+            return JsonResponse({'message' : "SUCCESS", "updated_row" : 1}, status=201)
         
         except KeyError :
-            return JsonResponse({'message' : 'KEY ERROR' }, status=400)
+            return JsonResponse({'message' : 'KEY_ERROR' }, status=400)
             
         
     @login_decorator   
     def delete(self, request) :
         try :
-            user    = request.GET['user_id']
+            user_id = request.GET['user_id']
             cart_id = request.GET['cart_id']
             
-            if not Cart.objects.filter(user = user).exists() :
-                return JsonResponse({"message" : 'CART IS EMPTY'}, status = 400)
+            if not Cart.objects.filter(user = user_id).exists() :
+                return JsonResponse({"message" : 'CART_IS_EMPTY'}, status = 400)
             
             if not Cart.objects.filter(id = cart_id) :
-                return JsonResponse({"message" : 'NOT EXISTS ITEM IN CART'}, status = 400)
+                return JsonResponse({"message" : 'NOT_EXISTS_ITEM_IN_CART'}, status = 400)
             
-            delete_carts = Cart.objects.get(
-                user  = user,
+            Cart.objects.filter(
+                user  = user_id,
                 id    = cart_id
-            )
-            
-            delete_carts.delete()
-            
-            return JsonResponse({"message" : 'DELETED'}, status = 200)
+            ).delete()
+        
+            return JsonResponse({"message" : 'DELETED', "deleted_row" : 1}, status = 200)
         
         except KeyError:
-            return JsonResponse({'message': "KEY ERROR"}, status=400)
+            return JsonResponse({'message': "KEY_ERROR"}, status=400)
        

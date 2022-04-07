@@ -90,16 +90,18 @@ class ProductDetailView(View) :
     def get(self, request, product_id) :
         try :
             product            = Product.objects.get(id = product_id)
-            images             = Image.objects.filter(product_id = product_id)
+            images             = product.image_set.all()
             
             result = {
                 'thumbnail_image_url': product.thumbnail_image_url,
                 'name'               : product.name,
                 'price'              : product.price,
                 'description'        : product.description,
-                'size'               : [[size.name, size.id] for size in Size.objects.all()],
-                'color'              : [[color.name, color.id] for color in Color.objects.all()],
-                'image'              : [image.image_url for image in images ]
+                'size'               : [size.name for size in Size.objects.all()],
+                'color'              : [color.name for color in Color.objects.all()],
+                'image'              : [image.image_url for image in images ],
+                'size_id'            : [size.id for size in Size.objects.all()],
+                'color_id'           : [color.id for color in Color.objects.all()]
             }
             
             return JsonResponse({'message': result}, status=200)
