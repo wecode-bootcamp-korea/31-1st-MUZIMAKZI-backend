@@ -1,10 +1,8 @@
 from django.db.models import Q
-from django_mysql.models import GroupConcat
-
-from products.models    import Type, Product, Category, Landing, Promote
-
 from django.http        import JsonResponse
 from django.views       import View
+
+from products.models    import Type, Product, Category, Landing, Promote, Size, Color, Image
 
 class LandingView(View):
     def get(self, request):
@@ -86,3 +84,25 @@ class ProductListView(View):
         except Product.DoesNotExist:
             return JsonResponse({'message': 'product_not_exist'}, status=400)
 
+
+class ProductDetailView(View) :
+    
+    def get(self, request, product_id) :
+        try :
+            product            = Product.objects.get(id = product_id)
+            images             = Image.objects.filter(product_id = product_id)
+            
+            result = {
+                'thumbnail_image_url': product.thumbnail_image_url,
+                'name'               : product.name,
+                'price'              : product.price,
+                'description'        : product.description,
+                'size'               : [size.name for size in Size.objects.all()],
+                'color'              : [color.name for color in Color.objects.all()],
+                'image'              : [image.image_url for image in images ]
+            }
+            
+            return JsonResponse({'message': result}, status=200)
+    
+        except Product.DoesNotExist:
+            return JsonResponse({'message': "INVALID PRODUCT"}, status=400)
