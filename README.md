@@ -8,7 +8,8 @@ Talent wins games, but Teamwork wins championships. by MJ.
 ![후반](https://user-images.githubusercontent.com/91510831/162604372-ce705b3f-7963-4a8f-863b-cc0f7963addd.gif)
 ![카트](https://user-images.githubusercontent.com/91510831/162604400-48bd27bb-2328-4c18-abce-2c3505b2ad44.gif)
 
-
+## Data Modeling
+<img width="1320" alt="image" src="https://user-images.githubusercontent.com/91510831/162604626-6a255d08-087e-4378-8a46-96ccef7f6a31.png">
 
 ## Getting Started
 
@@ -30,6 +31,11 @@ conda activate "virtual env name"
 pip install -r requirements.txt
 create database NAME character set utf8mb4 collate utf8mb4_general_ci;
 ```
+
+## 기억에 남는 코드
+<img width="1926" alt="image" src="https://user-images.githubusercontent.com/91510831/162604664-f194d4ef-a3ec-44ae-ba2b-00710c1ccb49.png">
+<img width="1926" alt="image" src="https://user-images.githubusercontent.com/91510831/162604674-e9e77867-8faf-4090-978b-2efda8acb991.png">
+
 
 ## Notion
 [1] https://quirky-eocursor-b74.notion.site/muzimakzi-first-project-6f174d1eb5be404c93a1ce9cc905dce5 <br>
